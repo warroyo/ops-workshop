@@ -1,0 +1,94 @@
+= Scaling Apps
+
+== Overview
+
+In this lab we will be scaling our previous application
+
+== Set up the working dir
+
+. Change the working directory to be _ops-workshop/labs/my_work/dotnet-core-sample_
+
+== Manually scale the application
+
+. scale the application using the cli
+
+----
+$ cf scale -i 3 <your-initials>-sample-app
+----
+
+. view your app instances
+
+----
+$ cf app <your-initials>-sample-app
+----
+
+. you should see multiple instances running now
+
+. scale your instances back down
+
+----
+$ cf scale -i 1 <your-initials>-sample-app
+----
+
+== Set up Autoscaling
+
+. we now will set up autoscaling
+
+
+. download the https://network.pivotal.io/products/pcf-app-autoscaler[autoscaler cli] from pivnet. scaling can also be done via the appsman UI if necessary
+
+. install the plugin
+
+----
+$ cf install-plugin /path/to/download
+----
+
+. list the apps that are using autoscaling
+
+----
+$ cf autoscaling-apps
+----
+
+. enable autoscaling on your app
+
+----
+$ cf enable-autoscaling <your-initials>-sample-app
+----
+
+. set your instance limits
+
+----
+$ cf update-autoscaling-limits <your-initials>-sample-app 2 4
+----
+
+. set an http_throughput scaling rule
+
+----
+$ cf create-autoscaling-rule <your-initials>-sample-app http_throughput 5 10
+----
+
+== Triggering a Scale
+
+. create some http load using vegeta
+
+. change into the _tools/vegeta_ directory in this repo. there is a binary for mac or windows in there
+
+. get your apps route
+
+----
+$ cf app <your-initials>-sample-app
+----
+
+. run vegeta, for windows add _.exe_ to the command
+----
+$ echo "GET <your-route>" | ./vegeta attack -duration=120s | tee results.bin | ./vegeta report
+----
+
+. in a separate window watch autoscaling events, you can also watch this in appsman
+
+----
+$ cf autoscaling-events <your-initials>-sample-app
+----
+
+. after you see the app scaling and vegeta is done, you should see the app scale back down.
+

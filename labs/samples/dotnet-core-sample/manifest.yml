@@ -1,0 +1,5 @@
+---
+applications:
+- name: dotnet-sample
+  random-route: true
+  memory: 254M

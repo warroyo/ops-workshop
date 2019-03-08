@@ -1,0 +1,42 @@
+:title: Ops Workshop Lab Guide
+:author: Will Arroyo
+:email: warroyo@pivotal.io
+:revnumber: 1.0
+:revdate: {docdate}
+:revyear: 2019
+:subject: Ops Workshop
+:keywords: Ops, DevOps
+
+= Ops Workshop Lab Guide
+
+toc::[]
+
+:leveloffset: +1
+
+<<<
+
+include::introduction.adoc[]
+
+<<<
+
+include::00-introduction_to_cli.adoc[]
+
+<<<
+
+include::00-introduction_to_apps_man.adoc[]
+
+<<<
+
+include::01-using_services[]
+
+<<<
+
+include::02-scaling_apps[]
+
+<<<
+
+include::03-monitoring_apps[]
+
+<<<
+:leveloffset: -1
+

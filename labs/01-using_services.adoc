@@ -1,0 +1,96 @@
+= Using Services
+
+== Overview
+
+In this lab we will be deploying an app,creating a mysql service and then leveraging that mysql service in the app. 
+
+== Set up the working dir
+
+. Change the working directory to be _ops-workshop/labs/my_work_
+
+
+. copy the  _ops-workshop/labs/sample/dotnet-core-sample_folder_ into the working dir
+
+. change into the newly copied directory
+
+== Push the application
+
+. from the newly copied directory run the following
+
+----
+$ cf push <your-initials>-sample-app
+----
+
+. At this point you should have a runnning app that is using an in memory DB. If you add an entry or delete one and restart the app you changes will be gone. 
+
+== Create a service
+
+. List services in the Marketplace
+
+----
+$ cf marketplace
+----
+
+. create a mysql service(takes ~5min)
+
+----
+$ cf create-service p.mysql db-small <your-initials>MySqlService
+----
+
+. list the created services, you will also see in progress services here
+
+----
+$ cf services
+----
+
+. list the status of your service
+
+----
+$ cf service <your-initials>MySqlService
+----
+
+. once you see _create succeeded_ in the output of the above command move on.
+
+== Modify the app settings to use MYSQL
+
+. open the _dotnet-core-sample/src/appsettings.json_ in an editor
+
+. set the _mysql_ property to _true_
+
+
+== Bind the service to the app
+
+. edit the _manifest.yml_ file and add the snippet below
+
+----
+
+services: 
+  - <your-initials>MySqlService
+----
+
+. re-push your application
+
+----
+$ cf push <your-initials>-sample-app
+----
+
+. you should see a diff and some output saying binding service to the app
+
+. check to see if the service was bound, you should see your app in the list of bound apps
+
+----
+$ cf service <your-initials>MySqlService
+----
+
+== View database details
+
+. run the env command to dump the apps environment vars
+
+----
+$ cf env <your-initials>-sample-app
+----
+
+. notice the _p.mysql_ section
+
+
+your app is now using a mysql database for storing its configs

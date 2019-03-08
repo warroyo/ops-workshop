@@ -1,0 +1,27 @@
+= Introduction to Apps Man
+
+== Overview
+
+this lab will walk you through apps man. we will first do this as a developer then as a admin
+
+== Kick the tires in AppsMan (Developer)
+
+. login to the apps manager UI at _https://apps.run.pcfone.io/_ _dev*_ account
+
+. Go look around inside of the org and space
+. View the marketplace
+. check out quotas
+. view yours apps
+. explore the different tabs in the apps
+. ask any questions you want
+
+== Kick the tires in AppsMan (Admin)
+
+. login to the apps manager UI at _https://apps.run.pcfone.io/_ with your _ops*_ account
+
+. Go look around at the space and orgs
+. View the marketplace
+. check out quotas
+. view yours apps
+. explore the different tabs in the apps
+. notice that more orgs and options are available to you 
