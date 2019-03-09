@@ -79,14 +79,7 @@ If you are having trouble resolving artifacts, you are likely running in a https
   cf stop cf-nodejs
   cf apps
 
-== Kick the tires in AppsMan
 
-. Go look around at the space and orgs
-. View the marketplace
-. check out quotas
-. view yours apps
-. explore the different tabs in the apps
-. ask any questions you want
   
 == How to cleanup after yourself
 
