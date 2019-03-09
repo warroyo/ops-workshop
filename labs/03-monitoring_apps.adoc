@@ -1,0 +1,79 @@
+:imagesdir:   images
+= Monitoring Apps
+
+== Overview
+
+In this lab we will be looking at how to view logs and metrics for apps.
+
+== Set up the working dir
+
+. Change the working directory to be _ops-workshop/labs/my_work/dotnet-core-sample_
+
+== viewing the logs
+
+. view recent logs for your app
+
+----
+$ cf logs --recent <your-initials>-sample-app
+----
+
+. tail the logs  for your app
+
+----
+$ cf logs  <your-initials>-sample-app
+----
+
+. these can also be viewed in the "Logs" tab in appsman
+
+. notice the different type of logs that are emitted. you should see things like _RTR_ and _APP_ . as list of all types can be found https://docs.pivotal.io/pivotalcf/2-4/devguide/deploy-apps/streaming-logs.html#format[here]
+
+== SSH into your app
+
+. sometimes it can be useful to ssh in to the container if something strange it happening. this is not recomended to be enabled in prod. however in  non-prod it can be useful
+
+. ssh into your app
+
+----
+$ cf ssh -k <your-initials>-sample-app
+----
+
+. 
+
+== using PCF Metrics
+
+. login to apps man and go to your app.
+
+. click on the pcf metrics link above your app instances.
+
+image::pcfmetrics.png[]
+
+. you will see some default monitors built for your application. new monitors can be added based custom metrics from the apps. 
+
+. you can also search the log history by clicking on the logs tab at the bottom of the page
+
+image::logs.png[]
+
+. create an event monitor for the app
+
+image::monitors.png[]
+
+. create a new event monitor
+
+image::event.png[]
+
+. create an ssh monitor
+
+image::ssh.png[]
+
+. we will skip the webhook for now but if you have slack for example you could send alerts there.
+
+. now ssh into your app a few times
+
+----
+$ cf ssh -k  <your-initials>-sample-app
+----
+
+. check the triggered events log, it may take a minute to register the event trigger.
+
+image::triggered.png[]
+
