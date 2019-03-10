@@ -15,6 +15,8 @@ using Steeltoe.Management.Endpoint.Env;
 using Microsoft.EntityFrameworkCore;
 using Steeltoe.CloudFoundry.Connector.MySql;
 using Steeltoe.CloudFoundry.Connector.MySql.EFCore;
+using Steeltoe.Extensions.Configuration.CloudFoundry;
+
 
 namespace account_api
 {
@@ -32,6 +34,7 @@ namespace account_api
         {
             services.AddEnvActuator(Configuration);
             services.AddCloudFoundryActuators(Configuration);
+            services.ConfigureCloudFoundryOptions(Configuration);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             if (Configuration.GetValue<bool>("mysql")) {
                 services.AddDbContext<AccountDb>(options => options.UseMySql(Configuration));

@@ -1,0 +1,45 @@
+= Credhub Service Broker
+
+== Overview
+
+In this lab we will be creating a credhub service broker and using it to add secrets to our app.
+
+== Set up the working dir
+
+. Change the working directory to be _ops-workshop/labs/my_work/dotnet-core-sample_
+
+== create a service broker
+
+. create a service broker instancefor your app with a secret.
+
+----
+$ cf create-service credhub default <your-initials>-secrets -c '{"workshop_secret":"<somevalue>"}'
+----
+
+. bind the credhub secrets to your app
+
+----
+$ cf bind-service <your-initials>-secrets <your-initials>-sample-app
+----
+
+. restage your app
+
+----
+$ cf restage <your-initials>-sample-app
+----
+
+. look at your apps env vars
+
+----
+$ cf env <your-initials>-sample-app
+----
+
+. notice that the credentials section for your service is just a link to an entry in credhub. no secrets are visible in plain text.
+
+. view the secrets in the app, use curl below or visit the page in your browser
+
+----
+$ curl -k <your-app-route>/api/secret
+----
+
+

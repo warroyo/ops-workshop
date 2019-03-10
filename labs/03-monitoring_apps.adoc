@@ -37,7 +37,7 @@ $ cf logs  <your-initials>-sample-app
 $ cf ssh -k <your-initials>-sample-app
 ----
 
-. 
+. you can poke around at the filesystem in the container now.
 
 == using PCF Metrics
 
@@ -76,4 +76,6 @@ $ cf ssh -k  <your-initials>-sample-app
 . check the triggered events log, it may take a minute to register the event trigger.
 
 image::triggered.png[]
+
+
 
