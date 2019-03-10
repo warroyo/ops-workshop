@@ -4,7 +4,7 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: senforsce/artillery
+    repository: mvilliger/artillery-docker
     tag: "latest"
 
 inputs:
