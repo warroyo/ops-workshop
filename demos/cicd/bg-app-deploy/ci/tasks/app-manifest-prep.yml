@@ -8,11 +8,11 @@ image_resource:
     tag: "latest"
 
 inputs:
-- name: concourse-pipeline-samples
+- name: application
 - name: current-app-info
 
 outputs:
 - name: app-manifest-output
 
 run:
-  path: concourse-pipeline-samples/pipelines/appdev/blue-green-app-deployment/ci/tasks/app-manifest-prep
+  path: application/demos/cicd/bg-app-deploy/ci/tasks/app-manifest-prep
