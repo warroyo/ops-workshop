@@ -6,7 +6,7 @@ This is an example of a Concourse pipeline that builds, tests and deploys a **No
 
 ![Blue-Green application deployment pipeline on Concourse](https://raw.githubusercontent.com/pivotalservices/concourse-pipeline-samples/master/common/images/bg-pipeline-01a.jpg)
 
-The steps automated in the pipeline are as follows:
+The steps automated in the pipeline are as follows, all of these minus unit tests will happen for 3 environments dev,qa,and prod.:
 
 1. **Retrieve the application's source code from GitHub**  
    The pipeline is automatically triggered upon a code update/check-in event in the GitHub repository.
@@ -20,16 +20,16 @@ The steps automated in the pipeline are as follows:
 1. **Perform load tests**  
    The pipeline runs load tests on the newly deployed application instance using the [Artillery framework](https://artillery.io/docs/getting-started/).
 
-1. **Promote new application version to production**  
+2. **Promote new application version to have live traffic**  
    Using Cloud Foundry's route management capabilities, the pipeline switches the route of your main application URL (e.g. http://main-app-hello.cfapps.io/ ) to point to the new application instance's URL with no downtime for external users.
 
 Each pipeline step is configured to run automatically only if the previous step has been successfully executed.
 
 ## Pipeline execution notes
 
-When the pipeline executes successfully all the way to its last step, it creates a **main route/URL** for the application in production using the format: ```main-<your-app-prefix>.<your-app-domain>```.  For example: ```main-myapp.cfapp.io```  
+When the pipeline executes successfully all the way to its last step, it creates a **main route/URL** for the application in production using the format: ```main-<your-app-prefix>-<env>.<your-app-domain>```.  For example: ```main-myapp-dev.cfapp.io```  
 
-That main route/URL will point to either the **blue** instance (e.g. ```blue-myapp.cfapp.io```) or the **green** instance (e.g. ```green-myapp.cfapp.io```) of your application, depending on which instance was the last promoted by the pipeline.   
+That main route/URL will point to either the **blue** instance (e.g. ```blue-myapp-dev.cfapp.io```) or the **green** instance (e.g. ```green-myapp-dev.cfapp.io```) of your application, depending on which instance was the last promoted by the pipeline.   
 
 For you to inspect which instance is being used by the main route, simply point your web browser to the main application URL and look at the application ID displayed on the page. The example screenshot below shows the main url pointing to the blue instance of the application.
 
@@ -46,6 +46,8 @@ The requirements for this pipeline's setup are as follows:
 1. The Concourse Fly command line interface is installed on the local VM.  
    The Fly cli can be downloaded directly from the link provided on the Concourse web interface.  
    Please refer to the [Fly cli documentation](http://concourse-ci.org/fly-cli.html) for details.
+
+1. 3 spaces in an org ex. dev,qa,prod
 
 
 ## Pipeline setup and execution
@@ -64,18 +66,20 @@ How to setup this sample pipeline on your Concourse server:
 _deploy-username:_ the CF CLI userID to deploy apps on the Cloud Foundry deployment  
 _deploy-password:_ the corresponding password to deploy apps on the Cloud Foundry deployment  
 _pws-organization:_ the ID of your targeted organization in Cloud Foundry   
-_pws-space:_ the name of your targeted space in Cloud Foundry (e.g. development)  
+_pws-dev-space:_ the name of your targeted dev space in Cloud Foundry (e.g. development) 
+_pws-qa-space:_ the name of your targeted qa space in Cloud Foundry (e.g. qa)  
+_pws-prod-space:_ the name of your targeted prod space in Cloud Foundry (e.g. prod)  
 _pws-api:_ the url of the CF API. (e.g. https://api.run.pivotal.io)  
 _pws-app-suffix:_ the domain suffix to append to the application hostname (e.g. my-test-app)  
 _pws-app-domain:_ the domain name used for your CF apps (e.g. cfapps.io)   
 
-3. Configure the sample pipeline in Concourse with the following commands:  
+1. Configure the sample pipeline in Concourse with the following commands:  
    __fly -t local login <concourse-url>__  
    Example:  
    __fly -t local login http://192.168.100.4:8080__  
    __fly -t local set-pipeline -c ci/pipeline.yml -p blue-green-pipeline -l ci/credentials.yml__
 
-4. Access to the Concourse web interface (e.g. http://192.168.100.4:8080 ), click on the list of pipelines, unpause the _blue-green-pipeline_ and then click on its link to visualize its pipeline diagram.
+2. Access to the Concourse web interface (e.g. http://192.168.100.4:8080 ), click on the list of pipelines, unpause the _blue-green-pipeline_ and then click on its link to visualize its pipeline diagram.
 
 You will then notice the pipeline's jobs getting executed within a few seconds, one at a time, if the previous job in the pipeline is executed successfully.
 

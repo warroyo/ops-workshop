@@ -1,10 +1,20 @@
 groups:
-- name: main
+- name: dev
   jobs:
   - unit-tests
-  - deploy-app
-  - load-tests
-  - promote-new-version
+  - deploy-app-dev
+  - load-tests-dev
+  - promote-new-version-dev
+- name: qa
+  jobs:
+  - deploy-app-qa
+  - load-tests-qa
+  - promote-new-version-qa
+- name: prod
+  jobs:
+  - deploy-app-prod
+  - load-tests-prod
+  - promote-new-version-prod
 
 resources:
 - name: application
@@ -12,7 +22,7 @@ resources:
   source:
     branch: master
     uri: https://github.com/warroyo/ops-workshop.git
-- name: PWS
+- name: dev-environment
   type: cf
   source:
     api: ((pws-api))
@@ -20,7 +30,25 @@ resources:
     username: ((deploy-username))
     password: ((deploy-password))
     skip_cert_check: true
-    space: ((pws-space))
+    space: ((pws-dev-space))
+- name: qa-environment
+  type: cf
+  source:
+    api: ((pws-api))
+    organization: ((pws-organization))
+    username: ((deploy-username))
+    password: ((deploy-password))
+    skip_cert_check: true
+    space: ((pws-qa-space))
+- name: prod-environment
+  type: cf
+  source:
+    api: ((pws-api))
+    organization: ((pws-organization))
+    username: ((deploy-username))
+    password: ((deploy-password))
+    skip_cert_check: true
+    space: ((pws-prod-space))
 
 jobs:
 - name: unit-tests
@@ -32,7 +60,7 @@ jobs:
   - task: run-unit-tests
     file: application/demos/cicd/bg-app-deploy/ci/tasks/unit-tests.yml
 
-- name: deploy-app
+- name: deploy-app-dev
   serial: true
   public: true
   plan:
@@ -43,68 +71,223 @@ jobs:
   - task: get-current-app-color
     file: application/demos/cicd/bg-app-deploy/ci/tasks/current-app-get-info.yml
     params:
-      PWS_APP_SUFFIX: ((pws-app-suffix))
+      PWS_APP_SUFFIX: ((pws-app-suffix))-dev
       PWS_API: ((pws-api))
       PWS_ORG: ((pws-organization))
       PWS_USER: ((deploy-username))
       PWS_PWD: ((deploy-password))
-      PWS_SPACE: ((pws-space))
+      PWS_SPACE: ((pws-dev-space))
   - task: prepare-app-manifest
     file: application/demos/cicd/bg-app-deploy/ci/tasks/app-manifest-prep.yml
     params:
-      PWS_APP_SUFFIX: ((pws-app-suffix))
-  - put: PWS
+      PWS_APP_SUFFIX: ((pws-app-suffix))-dev
+  - put: dev-environment
     params:
       manifest: app-manifest-output/manifest.yml
       path: application/demos/cicd/bg-app-deploy/bgd-app
 
-- name: load-tests
+- name: load-tests-dev
   serial: true
   public: true
   plan:
   - get: application
     trigger: true
     passed:
-      - deploy-app
+      - deploy-app-dev
   - task: get-current-app-color
     file: application/demos/cicd/bg-app-deploy/ci/tasks/current-app-get-info.yml
     params:
-      PWS_APP_SUFFIX: ((pws-app-suffix))
+      PWS_APP_SUFFIX: ((pws-app-suffix))-dev
       PWS_API: ((pws-api))
       PWS_ORG: ((pws-organization))
       PWS_USER: ((deploy-username))
       PWS_PWD: ((deploy-password))
-      PWS_SPACE: ((pws-space))
+      PWS_SPACE: ((pws-dev-space))
   - task: run-load-tests
     file: application/demos/cicd/bg-app-deploy/ci/tasks/load-tests.yml
     params:
-      PWS_APP_SUFFIX: ((pws-app-suffix))
+      PWS_APP_SUFFIX: ((pws-app-suffix))-dev
       PWS_APP_DOMAIN: ((pws-app-domain))
 
-- name: promote-new-version
+- name: promote-new-version-dev
   serial: true
   public: true
   plan:
   - get: application
     trigger: true
     passed:
-      - load-tests
+      - load-tests-dev
   - task: get-current-app-color
     file: application/demos/cicd/bg-app-deploy/ci/tasks/current-app-get-info.yml
     params:
-      PWS_APP_SUFFIX: ((pws-app-suffix))
+      PWS_APP_SUFFIX: ((pws-app-suffix))-dev
       PWS_API: ((pws-api))
       PWS_ORG: ((pws-organization))
       PWS_USER: ((deploy-username))
       PWS_PWD: ((deploy-password))
-      PWS_SPACE: ((pws-space))
+      PWS_SPACE: ((pws-dev-space))
   - task: switch-app-routes
     file: application/demos/cicd/bg-app-deploy/ci/tasks/update-routes.yml
     params:
-      PWS_APP_SUFFIX: ((pws-app-suffix))
+      PWS_APP_SUFFIX: ((pws-app-suffix))-dev
       PWS_APP_DOMAIN: ((pws-app-domain))
       PWS_API: ((pws-api))
       PWS_ORG: ((pws-organization))
       PWS_USER: ((deploy-username))
       PWS_PWD: ((deploy-password))
-      PWS_SPACE: ((pws-space))
+      PWS_SPACE: ((pws-dev-space))
+
+
+- name: deploy-app-qa
+  serial: true
+  public: true
+  plan:
+  - get: application
+    trigger: true
+    passed:
+      - promote-new-version-dev
+  - task: get-current-app-color
+    file: application/demos/cicd/bg-app-deploy/ci/tasks/current-app-get-info.yml
+    params:
+      PWS_APP_SUFFIX: ((pws-app-suffix))-qa
+      PWS_API: ((pws-api))
+      PWS_ORG: ((pws-organization))
+      PWS_USER: ((deploy-username))
+      PWS_PWD: ((deploy-password))
+      PWS_SPACE: ((pws-qa-space))
+  - task: prepare-app-manifest
+    file: application/demos/cicd/bg-app-deploy/ci/tasks/app-manifest-prep.yml
+    params:
+      PWS_APP_SUFFIX: ((pws-app-suffix))-qa
+  - put: qa-environment
+    params:
+      manifest: app-manifest-output/manifest.yml
+      path: application/demos/cicd/bg-app-deploy/bgd-app
+
+- name: load-tests-qa
+  serial: true
+  public: true
+  plan:
+  - get: application
+    trigger: true
+    passed:
+      - deploy-app-qa
+  - task: get-current-app-color
+    file: application/demos/cicd/bg-app-deploy/ci/tasks/current-app-get-info.yml
+    params:
+      PWS_APP_SUFFIX: ((pws-app-suffix))-qa
+      PWS_API: ((pws-api))
+      PWS_ORG: ((pws-organization))
+      PWS_USER: ((deploy-username))
+      PWS_PWD: ((deploy-password))
+      PWS_SPACE: ((pws-qa-space))
+  - task: run-load-tests
+    file: application/demos/cicd/bg-app-deploy/ci/tasks/load-tests.yml
+    params:
+      PWS_APP_SUFFIX: ((pws-app-suffix))-qa
+      PWS_APP_DOMAIN: ((pws-app-domain))
+
+- name: promote-new-version-qa
+  serial: true
+  public: true
+  plan:
+  - get: application
+    trigger: true
+    passed:
+      - load-tests-qa
+  - task: get-current-app-color
+    file: application/demos/cicd/bg-app-deploy/ci/tasks/current-app-get-info.yml
+    params:
+      PWS_APP_SUFFIX: ((pws-app-suffix))-qa
+      PWS_API: ((pws-api))
+      PWS_ORG: ((pws-organization))
+      PWS_USER: ((deploy-username))
+      PWS_PWD: ((deploy-password))
+      PWS_SPACE: ((pws-qa-space))
+  - task: switch-app-routes
+    file: application/demos/cicd/bg-app-deploy/ci/tasks/update-routes.yml
+    params:
+      PWS_APP_SUFFIX: ((pws-app-suffix))-qa
+      PWS_APP_DOMAIN: ((pws-app-domain))
+      PWS_API: ((pws-api))
+      PWS_ORG: ((pws-organization))
+      PWS_USER: ((deploy-username))
+      PWS_PWD: ((deploy-password))
+      PWS_SPACE: ((pws-qa-space))
+
+- name: deploy-app-prod
+  serial: true
+  public: true
+  plan:
+  - get: application
+    trigger: true
+    passed:
+      - promote-new-version-qa
+  - task: get-current-app-color
+    file: application/demos/cicd/bg-app-deploy/ci/tasks/current-app-get-info.yml
+    params:
+      PWS_APP_SUFFIX: ((pws-app-suffix))-prod
+      PWS_API: ((pws-api))
+      PWS_ORG: ((pws-organization))
+      PWS_USER: ((deploy-username))
+      PWS_PWD: ((deploy-password))
+      PWS_SPACE: ((pws-prod-space))
+  - task: prepare-app-manifest
+    file: application/demos/cicd/bg-app-deploy/ci/tasks/app-manifest-prep.yml
+    params:
+      PWS_APP_SUFFIX: ((pws-app-suffix))-prod
+  - put: prod-environment
+    params:
+      manifest: app-manifest-output/manifest.yml
+      path: application/demos/cicd/bg-app-deploy/bgd-app
+
+- name: load-tests-prod
+  serial: true
+  public: true
+  plan:
+  - get: application
+    trigger: true
+    passed:
+      - deploy-app-prod
+  - task: get-current-app-color
+    file: application/demos/cicd/bg-app-deploy/ci/tasks/current-app-get-info.yml
+    params:
+      PWS_APP_SUFFIX: ((pws-app-suffix))-prod
+      PWS_API: ((pws-api))
+      PWS_ORG: ((pws-organization))
+      PWS_USER: ((deploy-username))
+      PWS_PWD: ((deploy-password))
+      PWS_SPACE: ((pws-prod-space))
+  - task: run-load-tests
+    file: application/demos/cicd/bg-app-deploy/ci/tasks/load-tests.yml
+    params:
+      PWS_APP_SUFFIX: ((pws-app-suffix))-prod
+      PWS_APP_DOMAIN: ((pws-app-domain))
+
+- name: promote-new-version-prod
+  serial: true
+  public: true
+  plan:
+  - get: application
+    trigger: false
+    passed:
+      - load-tests-prod
+  - task: get-current-app-color
+    file: application/demos/cicd/bg-app-deploy/ci/tasks/current-app-get-info.yml
+    params:
+      PWS_APP_SUFFIX: ((pws-app-suffix))-prod
+      PWS_API: ((pws-api))
+      PWS_ORG: ((pws-organization))
+      PWS_USER: ((deploy-username))
+      PWS_PWD: ((deploy-password))
+      PWS_SPACE: ((pws-prod-space))
+  - task: switch-app-routes
+    file: application/demos/cicd/bg-app-deploy/ci/tasks/update-routes.yml
+    params:
+      PWS_APP_SUFFIX: ((pws-app-suffix))-prod
+      PWS_APP_DOMAIN: ((pws-app-domain))
+      PWS_API: ((pws-api))
+      PWS_ORG: ((pws-organization))
+      PWS_USER: ((deploy-username))
+      PWS_PWD: ((deploy-password))
+      PWS_SPACE: ((pws-prod-space))
