@@ -1,0 +1,26 @@
+= Sample Workshop Schedule
+
+The following tables are meant to illustrate how the content in this repository is meant to be delivered (and consumed) over a period of one day.
+
+Day 1
+^^^^^^
+.Schedule
+[options="header"]
+|=======================================================
+| Start   | End        | Session
+| 9:00    | 9:30       | Breakfast and Intros
+| 9:30    | 10:00      | Cloud Native Intro
+| 10:00   | 10:45      | PCF architecture and operations
+| 10:45   | 11:00      | Break
+| 11:00   | 11:30      | ‘Platform as a Product’
+| 11:30   | 12:00      | Demo: PCF Automation & OpsMan
+| 12:00   | 12:15      | Labs: CF Dev experience
+| 12:15   | 1:00       | Lunch(Finish Labs)
+| 1:00    | 1:30       | Demo: Observability
+| 1:30    | 2:00       | Security
+| 2:00    | 2:30       | Lab: Security
+| 2:30    | 2:45       | Break
+| 2:45    | 3:30       | Demo: Power of BOSH
+| 3:30    | 3:45       | Demo : CI/CD
+| 3:45    | 4:00       | Wrap Up
+|=======================================================

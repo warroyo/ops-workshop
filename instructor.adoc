@@ -1,0 +1,17 @@
+= Instructor Docs
+
+== Requirements
+
+* PAS installation with the following tiles
+** PCF Metrics
+** Healthwatch
+** Credhub Service Broker
+** MYSQL
+
+* Concourse server
+
+== Setup
+
+. use the cf mgmt scripts located here to create  spaces and users
+
+

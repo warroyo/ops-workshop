@@ -1,0 +1,24 @@
+= Ops Workshop
+
+A collection of workshop presentations and labs exercises for use at client sites. Focus on Pivotal Application Service, Cloud Native concepts,Cloud Native Security, CI/CD, Platform Automation, and Platform as a Product Typically conducted over a link:SCHEDULE.adoc[1 day period].
+
+
+== Software Prerequisities
+
+=== Minimum requirements
+
+-> https://docs.cloudfoundry.org/cf-cli/install-go-cli.html[CF-CLI] 6.42 or better
+
+-> https://network.pivotal.io/products/pcf-app-autoscaler[cf autoscaler plugin]
+
+
+== Clone this repository
+
+[source,bash]
+---------------------------------------------------------------------
+git clone https://github.com/warroyo/ops-workshop
+---------------------------------------------------------------------
+
+== Instructor Docs
+
+if you are running this workshop you can find the detailed setup docs link:instructor.adoc[here]
