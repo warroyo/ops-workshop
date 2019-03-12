@@ -19,7 +19,7 @@ $ cf create-service credhub default <your-initials>-secrets -c '{"workshop_secre
 . bind the credhub secrets to your app
 
 ----
-$ cf bind-service <your-initials>-secrets <your-initials>-sample-app
+$ cf bind-service <your-initials>-sample-app <your-initials>-secrets
 ----
 
 . restage your app
