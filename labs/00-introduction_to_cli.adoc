@@ -47,7 +47,7 @@ Enter your account username and password, then select an org and space.
 . Time to deploy an app. How about Node.js? 
 +
   cd nodejs-sample
-  cf push -c "node server.js"
+  cf push node_app-<initials>
 +
 If you are having trouble resolving artifacts, you are likely running in a https://docs.cloudfoundry.org/buildpacks/node/index.html#yarn_disconnected[disconnected] environment, so follow these steps and try pushing the app again.
 +
@@ -59,14 +59,14 @@ If you are having trouble resolving artifacts, you are likely running in a https
 . Next, let's try deploying a Python app.
 +
   cd ../python-sample
-  cf push my_pyapp
+  cf push my_pyapp-<initials>
   
 . Rinse and repeat for .Net Core and Go apps
 +
   cd ../dotnet-core-sample
-  cf push
+  cf push dotnet-<initials>
   cd ../go-sample
-  cf push awesome-go-app -m 64M --random-route
+  cf push goapp-<initials> -m 64M --random-route
   
 . Check what applications have been deployed so far
 +
