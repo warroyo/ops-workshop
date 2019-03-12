@@ -36,7 +36,7 @@ namespace account_api.Controllers
         public ActionResult<String> GetServices()
         {
             CloudFoundryServicesOptions services = CloudFoundryServices == null ? new CloudFoundryServicesOptions() : CloudFoundryServices;
-           return "the value of workshop_secret is: " + services.ServicesList[0].Credentials["workshop_secret"].Value;
+           return "the value of workshop_secret is: " + services.Services["credhub"][0].Credentials["workshop_secret"].Value;
         }
   
     }
