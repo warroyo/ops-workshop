@@ -1,0 +1,8 @@
+---
+applications:
+  - memory: 128MB
+  disk_quota: 256MB
+  command: main
+  random-route: true
+  env:
+    GOPACKAGENAME: main

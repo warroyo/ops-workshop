@@ -66,7 +66,7 @@ If you are having trouble resolving artifacts, you are likely running in a https
   cd ../dotnet-core-sample
   cf push dotnet-<initials>
   cd ../go-sample
-  cf push goapp-<initials> -m 64M --random-route
+  cf push goapp-<initials>
   
 . Check what applications have been deployed so far
 +
@@ -76,7 +76,7 @@ If you are having trouble resolving artifacts, you are likely running in a https
 
 . Let's stop an app, then check that it has indeed been stopped
 +
-  cf stop cf-nodejs
+  cf stop node_app-<initials>
   cf apps
 
 
@@ -85,7 +85,7 @@ If you are having trouble resolving artifacts, you are likely running in a https
 
 . Finally, let's delete an app
 +
-  cf delete cf-nodejs
+  cf delete node_app-<initials>
 +  
 -> Repeat `cf delete` for each app you deployed.
 
