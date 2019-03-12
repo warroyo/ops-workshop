@@ -53,6 +53,10 @@ image::pcfmetrics.png[]
 
 image::logs.png[]
 
+. RTR logs also will have the below icon to view in the trace explorer. this is  added when an app is using sping cloud slueth.
+
+image::trace.png[]
+
 . create an event monitor for the app
 
 image::monitors.png[]
