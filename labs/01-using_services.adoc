@@ -93,4 +93,12 @@ $ cf env <your-initials>-sample-app
 . notice the _p.mysql_ section
 
 
-your app is now using a mysql database for storing its configs
+your app is now using a mysql database for storing its data
+
+what happened here:
+
+. created a dedicated mysql instance
+. bound that instance  to our app
+. service broker created credentials and generated connection strings
+. all credentials were injected into the app
+. our app using steeltoe was  able to immediately recognize the creds and use them.
