@@ -51,7 +51,7 @@ $ cf autoscaling-apps
 
 . enable autoscaling on your app
 
-image:autoscale.png[]
+image::autoscale.png[]
 
 . set your instance limits
 
