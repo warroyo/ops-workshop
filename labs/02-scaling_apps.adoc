@@ -81,7 +81,7 @@ $ cf app <your-initials>-sample-app
 
 . run vegeta, for windows add _.exe_ to the command
 ----
-$ echo "GET <your-route>" | ./vegeta attack -duration=120s | tee results.bin | ./vegeta report
+$ echo "GET <your-route>" | ./vegeta attack -duration=120s -rate 100 | tee results.bin | ./vegeta report
 ----
 
 . in a separate window watch autoscaling events, you can also watch this in appsman
@@ -89,6 +89,13 @@ $ echo "GET <your-route>" | ./vegeta attack -duration=120s | tee results.bin | .
 ----
 $ cf autoscaling-events <your-initials>-sample-app
 ----
+
+. check the number of app instances 
+
+----
+$ cf app <your-initials>-sample-app
+----
+
 
 . after you see the app scaling and vegeta is done, you should see the app scale back down.
 
